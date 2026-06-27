@@ -17,7 +17,7 @@ import { addSection } from "@/features/draftPage/slice";
 
 import { useAppDispatch } from "@/hooks/redux";
 
-import type { SectionType } from "@/types/section";
+import type { Section, SectionType } from "@/types/section";
 import { selectSection } from "@/features/ui/slice";
 
 export default function AddSectionButton() {
@@ -27,13 +27,13 @@ export default function AddSectionButton() {
         const registry = sectionRegistry[type];
         const newSection = {
             id: crypto.randomUUID(),
-            type,
+            type: type as any,
             props: {
                 ...registry.defaultProps,
             },
         };
 
-        dispatch(addSection(newSection));
+        dispatch(addSection(newSection as Section));
         dispatch(selectSection(newSection.id));
 
 
