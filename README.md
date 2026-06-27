@@ -1,36 +1,425 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Page Studio
 
-## Getting Started
+A schema-driven landing page builder built with **Next.js App Router**, **TypeScript**, **Redux Toolkit**, and **Contentful**.
 
-First, run the development server:
+The application enables authorized users to preview, edit, and publish landing pages using a lightweight WYSIWYG editor while following a registry-based architecture.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+# Tech Stack
+
+- Next.js 15 (App Router)
+- TypeScript
+- Redux Toolkit
+- Contentful CMS
+- Tailwind CSS
+- shadcn/ui
+- Zod
+- dnd-kit
+- Vitest
+- Playwright
+- GitHub Actions
+
+---
+
+# Features
+
+## Schema Driven Rendering
+
+- Registry-based section rendering
+- Dynamic component lookup
+- Zod schema validation
+- Graceful fallback for unsupported sections
+- Error-safe rendering
+
+Supported sections:
+
+- Hero
+- Feature Grid
+- Testimonial
+- CTA
+
+---
+
+## Contentful Integration
+
+Content is loaded from Contentful through a dedicated adapter layer.
+
+Responsibilities are separated as follows:
+
+```
+UI
+    ↓
+Adapter
+    ↓
+Contentful SDK
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This ensures no Contentful-specific logic exists inside UI components.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Supports:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Published Content
+- Preview Content
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Studio (WYSIWYG Lite)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Studio provides:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Live Preview
+- Property Editing
+- Add Section
+- Reorder Sections
+- Draft Persistence
+- Registry-driven editing
 
-## Deploy on Vercel
+Supported property editing:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Hero
+- CTA
+- Feature Grid
+- Testimonial
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+State is managed entirely through Redux Toolkit.
+
+---
+
+# Redux Slice Responsibilities
+
+## draftPage
+
+Responsible for:
+
+- Current draft page
+- Section updates
+- Add section
+- Reorder sections
+- Dirty state
+
+---
+
+## ui
+
+Responsible for:
+
+- Selected section
+- Sidebar state
+- Loading/Error UI
+
+---
+
+## publish
+
+Responsible for:
+
+- Publish status
+- Current version
+- Publish summary
+
+---
+
+# Architecture
+
+```
+Contentful
+
+      │
+
+      ▼
+
+Adapter
+
+      │
+
+      ▼
+
+Redux Draft
+
+      │
+
+      ▼
+
+Section Registry
+
+      │
+
+      ▼
+
+Dynamic Renderer
+
+      │
+
+      ▼
+
+Preview
+```
+
+The application follows a registry pattern where each section defines:
+
+- Component
+- Editor
+- Schema
+- Default Props
+
+Adding a new section only requires updating the registry.
+
+---
+
+# Content Model
+
+```
+Page
+
+pageId
+
+slug
+
+title
+
+sections[]
+
+Section
+
+id
+
+type
+
+props
+```
+
+Section types:
+
+- hero
+- featureGrid
+- testimonial
+- cta
+
+---
+
+# Publish Flow
+
+Publishing follows the following pipeline:
+
+```
+Draft Page
+
+↓
+
+Schema Validation
+
+↓
+
+Published Page
+
+↓
+
+Diff Engine
+
+↓
+
+SemVer Decision
+
+↓
+
+Snapshot Generation
+
+↓
+
+Release JSON
+```
+
+---
+
+# SemVer Logic
+
+| Change                 | Version |
+| ---------------------- | ------- |
+| Text / Property Change | Patch   |
+| Section Added          | Minor   |
+| Section Removed        | Major   |
+| Section Type Changed   | Major   |
+
+---
+
+# Immutable Releases
+
+Each successful publish generates an immutable snapshot.
+
+Example:
+
+```
+releases/
+
+home/
+
+1.0.0.json
+
+1.0.1.json
+
+1.1.0.json
+```
+
+Each snapshot contains:
+
+- Version
+- Timestamp
+- Change Summary
+- Complete Page Schema
+
+---
+
+# RBAC
+
+Supported roles:
+
+### Viewer
+
+- Preview only
+- Cannot access Studio
+
+### Editor
+
+- Can edit pages
+- Cannot publish
+
+### Publisher
+
+- Full access
+- Can publish releases
+
+Route protection is implemented using Next.js Middleware.
+
+---
+
+# Accessibility
+
+The application has been developed following WCAG-oriented practices.
+
+Implemented:
+
+- Keyboard navigable UI
+- Focus states
+- Semantic headings
+- Accessible forms
+- Color contrast using Tailwind defaults
+
+---
+
+# Folder Structure
+
+```
+app/
+
+components/
+
+features/
+
+hooks/
+
+lib/
+
+registry/
+
+schemas/
+
+store/
+
+types/
+
+releases/
+
+tests/
+```
+
+---
+
+# Running Locally
+
+Clone the repository
+
+```
+git clone <repository-url>
+```
+
+Install dependencies
+
+```
+npm install
+```
+
+Configure environment variables
+
+```
+CONTENTFUL_SPACE_ID=
+
+CONTENTFUL_ACCESS_TOKEN=
+
+CONTENTFUL_PREVIEW_ACCESS_TOKEN=
+
+CONTENTFUL_ENVIRONMENT=
+```
+
+Run development server
+
+```
+npm run dev
+```
+
+Open
+
+```
+http://localhost:3000
+```
+
+---
+
+# Scripts
+
+```
+npm run dev
+
+npm run build
+
+npm run lint
+
+npm run test
+
+npm run playwright
+```
+
+---
+
+# Trade-offs & Assumptions
+
+- Local filesystem is used for release snapshots for simplicity.
+- Authentication is mocked using role cookies for RBAC demonstration.
+- Section editing currently supports the predefined section types.
+- The application focuses on architecture, maintainability, and separation of concerns over advanced visual editing.
+
+---
+
+# Future Improvements
+
+- Full authentication
+- Contentful publish integration
+- Rich text editor
+- Advanced drag-and-drop interactions
+- Undo / Redo
+- Version history UI
+- Snapshot rollback
+- Expanded test coverage
+- Automated CI accessibility reporting
+
+---
+
+# Author
+
+**Shreyas Kallurkar**
+
+Frontend / Full Stack Developer
+
+Email: [kshreyas495@gmail.com](mailto:kshreyas495@gmail.com)
+
+LinkedIn: https://linkedin.com/in/shreyaskallurkar
