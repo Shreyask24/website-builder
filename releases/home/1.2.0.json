@@ -1,0 +1,105 @@
+{
+  "version": "1.2.0",
+  "publishedAt": "2026-06-26T09:30:28.273Z",
+  "changes": [
+    {
+      "type": "SECTION_ADDED",
+      "sectionId": "2c35edee-a326-465e-bcde-ff718fe95163",
+      "sectionType": "hero",
+      "summary": "hero added"
+    },
+    {
+      "type": "SECTION_ADDED",
+      "sectionId": "0e30d67c-102c-4ebc-a2aa-02d3d4fc36ac",
+      "sectionType": "cta",
+      "summary": "cta added"
+    },
+    {
+      "type": "SECTION_ADDED",
+      "sectionId": "ed353afd-d6a3-45cb-9baf-3879f66b7627",
+      "sectionType": "hero",
+      "summary": "hero added"
+    },
+    {
+      "type": "SECTION_ADDED",
+      "sectionId": "35a40ba6-09e9-4409-a7f6-075ed04319ff",
+      "sectionType": "testimonial",
+      "summary": "testimonial added"
+    }
+  ],
+  "page": {
+    "pageId": "1",
+    "slug": "home",
+    "title": "Landing page",
+    "sections": [
+      {
+        "id": "hero-1",
+        "type": "hero",
+        "props": {
+          "heading": "Welcome to Page Studio",
+          "subHeading": "Schema Driven Pages"
+        }
+      },
+      {
+        "id": "feature-1",
+        "type": "featureGrid",
+        "props": {
+          "title": "Features",
+          "items": [
+            "Next.js",
+            "Redux Toolkit",
+            "Contentful"
+          ]
+        }
+      },
+      {
+        "id": "cta-1",
+        "type": "cta",
+        "props": {
+          "label": "Get Started with AI",
+          "url": "/"
+        }
+      },
+      {
+        "id": "testimonial-1",
+        "type": "testimonial",
+        "props": {
+          "quote": "Amazing experience!",
+          "author": "Shreyas"
+        }
+      },
+      {
+        "id": "2c35edee-a326-465e-bcde-ff718fe95163",
+        "type": "hero",
+        "props": {
+          "heading": "New Hero",
+          "subHeading": "Hero Subtitle"
+        }
+      },
+      {
+        "id": "0e30d67c-102c-4ebc-a2aa-02d3d4fc36ac",
+        "type": "cta",
+        "props": {
+          "label": "Click Here",
+          "url": "/"
+        }
+      },
+      {
+        "id": "ed353afd-d6a3-45cb-9baf-3879f66b7627",
+        "type": "hero",
+        "props": {
+          "heading": "New Hero",
+          "subHeading": "Hero Subtitle"
+        }
+      },
+      {
+        "id": "35a40ba6-09e9-4409-a7f6-075ed04319ff",
+        "type": "testimonial",
+        "props": {
+          "quote": "",
+          "author": ""
+        }
+      }
+    ]
+  }
+}
